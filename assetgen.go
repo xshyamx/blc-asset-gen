@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"crypto/md5"
 )
 
 func main() {
@@ -18,7 +19,10 @@ func main() {
 		if info.IsDir() {
 			fmt.Println(path + "/");
 		} else {
-			fmt.Println(path);
+			md5 := md5.New()
+			md5.Write([]byte(path))
+			digest := fmt.Sprintf("%x", md5.Sum(nil))
+			fmt.Printf("%s - %s\n", path, digest);
 		}
 		return nil
 	})
