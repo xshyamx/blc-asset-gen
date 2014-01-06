@@ -22,6 +22,7 @@ func main() {
 			md5 := md5.New()
 			md5.Write([]byte(path))
 			digest := fmt.Sprintf("%x", md5.Sum(nil))
+			digest = digest[0:4]
 			fmt.Printf("%s - %s\n", path, digest);
 		}
 		return nil
