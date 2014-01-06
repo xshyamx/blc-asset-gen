@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -12,6 +13,8 @@ func main() {
 		if err != nil {
 			return err
 		}
+		path = strings.Replace(path, "\\", "/", -1)
+		path = strings.Replace(path, rootDir, "/img", 1)
 		if info.IsDir() {
 			fmt.Println(path + "/");
 		} else {
