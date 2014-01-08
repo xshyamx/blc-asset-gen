@@ -19,7 +19,7 @@ func check(e error) {
 func copy(src, dest string) bool {
 	sf, err := os.Open(src)
 	check(err)
-	err = os.MkdirAll(filepath.Dir(dest), os.ModeDir)
+	err = os.MkdirAll(filepath.Dir(dest), os.ModeDir | 0755)
 	check(err)
 	df, err := os.Create(dest)
 	check(err)
