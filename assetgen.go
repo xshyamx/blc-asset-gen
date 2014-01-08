@@ -28,9 +28,16 @@ func copy(src, dest string) bool {
 }
 
 func main() {
+	debug   := flag.Bool("debug", false, "Print debug messages")
 	rootDir := flag.String("src", "", "Source folder to copy assets")
 	outDir  := flag.String("dest", "target", "Target folder to copy assets")
 	flag.Parse()
+	*rootDir, _ = filepath.Abs(*rootDir)
+	*outDir, _ = filepath.Abs(*outDir)
+	if *debug {
+		fmt.Println("rootDir:", *rootDir)
+		fmt.Println("outDir:", *outDir)
+	}
 	if *rootDir == "" {
 		flag.PrintDefaults()
 		return
@@ -40,8 +47,8 @@ func main() {
 		if err != nil {
 			return err
 		}
-		url := strings.Replace(path, "\\", "/", -1)
-		url = strings.Replace(url, *rootDir, "/img", 1)
+		url := strings.Replace(path, *rootDir, "/img", 1)
+		url = strings.Replace(url, "\\", "/", -1)
 		filename := filepath.Base(path)
 		if !info.IsDir() {
 			if filename[0] == '.' && len(filename) > 2 {
@@ -51,6 +58,9 @@ func main() {
 			md5.Write([]byte(url))
 			digest := fmt.Sprintf("%x", md5.Sum(nil))
 			dest := filepath.Join(*outDir, digest[0:2], digest[2:4], filename)
+			if *debug {
+				fmt.Println(path, "->", dest, "url:", url, "[" + digest + "]");
+			}
 			if copy(path, dest) {
 				fileCount++
 			}
