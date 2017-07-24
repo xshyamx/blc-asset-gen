@@ -1,25 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"io"
-	"path/filepath"
-	"strings"
 	"crypto/md5"
 	"flag"
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"strings"
 )
- 	
+
 func check(e error) {
-    if e != nil {
-        panic(e)
-    }
+	if e != nil {
+		panic(e)
+	}
 }
 
 func copy(src, dest string) bool {
 	sf, err := os.Open(src)
 	check(err)
-	err = os.MkdirAll(filepath.Dir(dest), os.ModeDir | 0755)
+	err = os.MkdirAll(filepath.Dir(dest), os.ModeDir|0755)
 	check(err)
 	df, err := os.Create(dest)
 	check(err)
@@ -28,9 +28,9 @@ func copy(src, dest string) bool {
 }
 
 func main() {
-	debug   := flag.Bool("debug", false, "Print debug messages")
+	debug := flag.Bool("debug", false, "Print debug messages")
 	rootDir := flag.String("src", "", "Source folder to copy assets")
-	outDir  := flag.String("dest", "target", "Target folder to copy assets")
+	outDir := flag.String("dest", "target", "Target folder to copy assets")
 	flag.Parse()
 	*rootDir, _ = filepath.Abs(*rootDir)
 	*outDir, _ = filepath.Abs(*outDir)
@@ -59,7 +59,7 @@ func main() {
 			digest := fmt.Sprintf("%x", md5.Sum(nil))
 			dest := filepath.Join(*outDir, digest[0:2], digest[2:4], filename)
 			if *debug {
-				fmt.Println(path, "->", dest, "url:", url, "[" + digest + "]");
+				fmt.Println(path, "->", dest, "url:", url, "["+digest+"]")
 			}
 			if copy(path, dest) {
 				fileCount++
